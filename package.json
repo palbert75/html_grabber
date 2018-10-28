@@ -1,0 +1,24 @@
+{
+  "name": "html-grabber",
+  "version": "0.0.1",
+  "description": "Grab HTML pages with canvas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "grab": "node index.js"
+  },
+  "keywords": [
+    "HTML",
+    "CSS",
+    "video",
+    "ffmpeg"
+  ],
+  "author": "Albert Papp",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "puppeteer": "^1.9.0",
+    "uniqid": "^5.0.3"
+  }
+}
