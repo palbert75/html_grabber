@@ -33,6 +33,7 @@ Currently there are 2 POST HTML endpoints:
 /api/video       - returns the rendered video as response
 /api/image      - returns the rendered image as response
 
+The rendered files will be stored in output directory too with a uniq request ID.
 
 ## Client
 
