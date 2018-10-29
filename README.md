@@ -29,7 +29,7 @@ function startCaptureVideo(frameRate, frames) {
 ```
 
 
-Check the example in  Please check the example in templates/tmp001/index.html for further details.
+Check the examplein templates/tmp001/index.html for further details.
 
 Currently there are 2 POST HTML endpoints:
 
