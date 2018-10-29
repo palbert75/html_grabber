@@ -1,6 +1,9 @@
 [[_TOC_]]
 
 ## Server
+
+After clone run npm install.
+
 Run  the server with `npm run grab`
 
 The server can grab png or web video from your html canvas animation using [ccapture](https://github.com/spite/ccapture.js/). We are using headless chrome browser for this ([puppeteer](https://github.com/GoogleChrome/puppeteer)) and the node.js express framework. 
