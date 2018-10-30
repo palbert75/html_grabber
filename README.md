@@ -68,5 +68,6 @@ curl -vX POST http://127.0.0.1:3000/api/video -d @test.json  --header "Content-T
 ```
 docker build -t htmlgrabber .
 docker run  -it --rm htmlgrabber /bin/bash
+docker run  -p 3000:3000 --rm htmlgrabber 
 ```
 

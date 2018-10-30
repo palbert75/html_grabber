@@ -24,6 +24,7 @@ RUN apt-get install -y  wget --no-install-recommends \
 RUN apt-get update
 RUN apt-get -y install curl 
 RUN apt-get -y install vim
+RUN apt-get -y install imagemagick imagemagick-doc
 
 # It's a good idea to use dumb-init to help prevent zombie chrome processes.
 ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 /usr/local/bin/dumb-init
@@ -41,13 +42,10 @@ WORKDIR app
 RUN npm i
 
 # Add user so we don't need --no-sandbox.
-RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
-    && mkdir -p /home/pptruser/Downloads \
-    && chown -R pptruser:pptruser /home/pptruser \
-   && chown -R pptruser:pptruser .
+RUN chmod -R 777 .
 
 # Run everything after as non-privileged user.
-USER pptruser
+USER 12345678
 
 EXPOSE 8084
 ENTRYPOINT ["dumb-init", "--"]
