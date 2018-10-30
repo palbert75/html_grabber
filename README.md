@@ -1,9 +1,4 @@
-[[_TOC_]]
-
 ## Server
-
-After clone run npm install.
-
 Run  the server with `npm run grab`
 
 The server can grab png or web video from your html canvas animation using [ccapture](https://github.com/spite/ccapture.js/). We are using headless chrome browser for this ([puppeteer](https://github.com/GoogleChrome/puppeteer)) and the node.js express framework. 
@@ -12,24 +7,26 @@ Place the html templates in templates directory. The html pages which can be gra
 
   
 ```
-function startCaptureVideo(frameRate, frames) {
+function startCapture(media, frameRate, frames, startFrame) {
+...}
 
-            capturer = new CCapture({
-                framerate: frameRate,
-                quality: 100,
-                verbose: false,
-                format: 'webm'
-            });
+function captureFrame() {
+...}
 
-            console.log("Created capturer with frameRate:" + frameRate + " and capturing " + frames + ".");
-            capturer.start();
-            FRAMES_END = frames;
-            captureImage = false;
-        }
+// and do not forget to call captureFrame at the end of your main animation loop
+
+function loop() {
+     window.requestAnimFrame(loop, c);
+     clear();
+     updatePoints();
+     renderShape();
+     captureFrame();   // <--- :)
+};
+
 ```
 
 
-Check the examplein templates/tmp001/index.html for further details.
+Check the example in  templates/tmp001/index.html for further details.
 
 Currently there are 2 POST HTML endpoints:
 
@@ -50,7 +47,8 @@ Client shall reach the Server endpoints with POST HTML request. The request body
     "width" : 800,
     "height" : 1200,
     "length" : 3,
-    "frameRate" : 30
+    "frameRate" : 30,
+    "startFrame" : 30
 }
 ```
 length und frameRate parameters are optional, and will be used only in video export.
@@ -61,8 +59,7 @@ test/test.json
 test/test.sh
 
 ```
-curl -vX POST http://127.0.0.1:3000/api/image -d @test.json  --header "Content-Type: application/json"
-curl -vX POST http://127.0.0.1:3000/api/video -d @test.json  --header "Content-Type: application/json"
+curl -vX POST http://127.0.0.1:3000/api/image -d @test.json  --header "Content-Type: application/json" --output test.png
+curl -vX POST http://127.0.0.1:3000/api/video -d @test.json  --header "Content-Type: application/json" --output test.webm
 ```
-
 

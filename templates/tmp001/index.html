@@ -152,32 +152,31 @@
         var capturer = null;
         var FRAMES_END;
 
-        function startCaptureVideo(frameRate, frames) {
+        function startCapture(media, frameRate, frames, startFrame) {
 
-            capturer = new CCapture({
-                framerate: frameRate,
-                quality: 100,
-                verbose: false,
-                format: 'webm'
-            });
+            if (media == "video") {
+                    capturer = new CCapture({
+                        framerate: frameRate,
+                        quality: 100,
+                        verbose: false,
+                        format: 'webm'
+                    });
+                    captureImage = false;
 
-            console.log("Created capturer with frameRate:" + frameRate + " and capturing " + frames + ".");
-            capturer.start();
-            FRAMES_END = frames;
-            captureImage = false;
-        }
+                } else {
+                    capturer = new CCapture({
+                        verbose: false,
+                        format: 'png'
+                    });
+                    captureImage = true;
+                }
+                
+                FRAMES_START = startFrame;
+                FRAMES_END = FRAMES_START + frames;
 
-        function startCaptureImage(frameRate, frames) {
-
-            capturer = new CCapture({
-                verbose: false,
-                format: 'png'
-            });
-
-            console.log("Created capturer and capturing screenshot.");
-            capturer.start();
-            captureImage = true;
-        }
+                console.log("Created capturer with frameRate:" + frameRate + " and capturing from frame " + FRAMES_START + " -> " + FRAMES_END);
+                capturer.start();
+            }
 
 
         ctx.lineJoin = 'round';
@@ -298,32 +297,39 @@
 
 
         var captureFrame = function () {
-            if (capturer) {
-                if (tick > FRAMES_END || captureImage) {
-
-                    capturer.stop();
-                    capturer.save(function (blob) {
-                        tick = 0;
-                        var reader = new FileReader();
-
-                        reader.readAsDataURL(blob);
-                        reader.onloadend = function () {
-                            base64data = reader.result;
-                            // console.log("save called with:" +
-                            //     base64data + ":");
-                           captureImage  ? saveImage(base64data) : saveVideo(base64data);   // this function is defined in node server source
+                if (capturer) 
+                {
+                    if (tick == FRAMES_END) {
+                       
+                        if (captureImage) {
+                            base64data = canvas.toDataURL("image/png");
+                            saveImage(base64data);
+                            capturer = null;
                         }
-                        console.log("Done");
-                    });
-                } else {
-                    capturer.capture(c);
+                        else {
+                            capturer.save(function (blob) {
+                                var reader = new FileReader();
+
+                                reader.readAsDataURL(blob);
+                                reader.onloadend = function () {
+
+                                    base64data = reader.result;
+                                    saveVideo(base64data);   // this function is defined in node server source
+                                    capturer = null;
+                                }
+                                console.log("Capture done");
+                            });
+                        }
+                    } else if (tick >= FRAMES_START && tick <= FRAMES_END) {
+                        capturer.capture(c);
+                        console.log("Captured frame " + tick + " done");
+                    }
+                    tick++;
                 }
             }
-        }
 
         var loop = function () {
             window.requestAnimFrame(loop, c);
-            tick++;
             clear();
             updatePoints();
             renderShape();
