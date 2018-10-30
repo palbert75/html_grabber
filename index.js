@@ -34,6 +34,8 @@ app.post('/api/video', (req, res) => {
         "s  starting at frame:" + startFrame + " using template " + template);
 
     puppeteer.launch({
+        executablePath: 'google-chrome',
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
         headless: true
     }).then(async browser => {
 
@@ -97,6 +99,8 @@ app.post('/api/image', (req, res) => {
         startFrame + " using template " + template);
 
     puppeteer.launch({
+        executablePath: 'google-chrome',
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
         headless: true
     }).then(async browser => {
         const page = await browser.newPage();

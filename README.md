@@ -63,3 +63,10 @@ curl -vX POST http://127.0.0.1:3000/api/image -d @test.json  --header "Content-T
 curl -vX POST http://127.0.0.1:3000/api/video -d @test.json  --header "Content-Type: application/json" --output test.webm
 ```
 
+## Docker
+
+```
+docker build -t htmlgrabber .
+docker run  -it --rm htmlgrabber /bin/bash
+```
+
